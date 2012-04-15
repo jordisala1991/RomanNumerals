@@ -3,6 +3,8 @@
 Class RomanNumerals
 {
 
+	private $maxNumber = 3000;
+	private $minNumber = 1;
 	private $knownConversions = array("M"	=> 1000,
 									  "CM"	=> 900,
 									  "D"	=> 500,
@@ -18,15 +20,28 @@ Class RomanNumerals
 									  "I" 	=> 1
 									  );
 
-	public function toRoman($number) 
+	private function isClosestConversion($number, $value)
 	{
-		if ($number > 0)
+		return ($number >= $value);
+	}
+
+	private function numberOutOfBoundaries($number)
+	{
+		return ($number > $this->maxNumber or $number < $this->minNumber);
+	}
+
+	private function toRomanRecursive($number) 
+	{
+		foreach ($this->knownConversions as $roman => $value)
 		{
-			foreach ($this->knownConversions as $roman => $value)
-			{
-				if ($number >= $value) return $roman.$this->toRoman($number - $value);
-			}
+			if ($this->isClosestConversion($number, $value)) return $roman.$this->toRomanRecursive($number - $value);
 		}
+	}
+
+	public function toRoman($number)
+	{
+		if ($this->numberOutOfBoundaries($number)) throw new InvalidArgumentException("Can't translate to roman: $number");
+		return $this->toRomanRecursive($number);
 	}
 
 }

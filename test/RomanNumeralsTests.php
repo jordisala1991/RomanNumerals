@@ -76,4 +76,38 @@ Class RomanNumeralsTests extends PHPUnit_Framework_TestCase
 		$this->assertEquals($expectedResult, $this->romanNumerals->toRoman($givenNumber));		
 	}
 
+	/**
+	* @test
+	*/
+	public function IfIPassANumberGraterThan3000IShouldRecieveAnException()
+	{
+		try
+		{
+			$this->romanNumerals->toRoman(3500);
+			$this->fail();
+		}
+		catch (InvalidArgumentException $exception)
+		{
+			$this->assertEquals("Can't translate to roman: 3500", $exception->getMessage());
+			return;
+		}
+	}
+
+	/**
+	* @test
+	*/
+	public function IfIPassANumberLessThan1IShouldRecieveAnException()
+	{
+		try
+		{
+			$this->romanNumerals->toRoman(-50);
+			$this->fail();
+		}
+		catch (InvalidArgumentException $exception)
+		{
+			$this->assertEquals("Can't translate to roman: -50", $exception->getMessage());
+			return;
+		}
+	}
+
 }
